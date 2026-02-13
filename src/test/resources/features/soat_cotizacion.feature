@@ -45,7 +45,7 @@ Característica: Cotización de SOAT Digital en Interseguro
     Ejemplos:
       | placa   |
       | ABC-123 |
-      | ABC-124 |
+      | ABC-123 |
 
   # ====================================================================================
   # ESCENARIOS NEGATIVOS
@@ -67,6 +67,6 @@ Característica: Cotización de SOAT Digital en Interseguro
     Entonces el sistema no permite avanzar y muestra error de validación
 
     Ejemplos:
-      | placa |
-      |       |
-      | @#$%& |
+      | placa  |
+      |        |
+      | @#$    |

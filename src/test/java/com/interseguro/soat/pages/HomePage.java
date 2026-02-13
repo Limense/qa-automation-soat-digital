@@ -48,10 +48,23 @@ public class HomePage {
 
     /**
      * Navega a la página principal de SOAT Digital.
+     * Reintenta hasta 2 veces si la página no carga correctamente.
      */
     public void navigateTo() {
-        driver.get(URL);
-        wait.until(ExpectedConditions.visibilityOf(inputPlaca));
+        int maxRetries = 2;
+        for (int i = 0; i <= maxRetries; i++) {
+            try {
+                driver.get(URL);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.id("plate")));
+                return; // Página cargó correctamente
+            } catch (Exception e) {
+                if (i == maxRetries) {
+                    throw e; // Último intento, propagar error
+                }
+                System.out.println("[Retry] Reintentando carga de página... intento " + (i + 2));
+                try { Thread.sleep(2000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+            }
+        }
     }
 
     /**
@@ -62,7 +75,11 @@ public class HomePage {
     public void enterPlaca(String placa) {
         wait.until(ExpectedConditions.visibilityOf(inputPlaca));
         inputPlaca.clear();
-        inputPlaca.sendKeys(placa);
+        if (placa != null && !placa.isEmpty()) {
+            inputPlaca.sendKeys(placa);
+        }
+        // Pequeña pausa para que Vue.js procese la validación reactiva
+        try { Thread.sleep(500); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 
     /**
