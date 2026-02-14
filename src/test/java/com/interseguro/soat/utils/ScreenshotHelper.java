@@ -24,7 +24,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class ScreenshotHelper {
 
-    private static final String SCREENSHOTS_DIR = "target/screenshots/";
+    private static final String SCREENSHOTS_DIR = ConfigManager.getInstance().getScreenshotsDir();
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 

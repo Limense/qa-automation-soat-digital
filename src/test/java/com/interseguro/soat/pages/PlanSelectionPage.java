@@ -2,7 +2,6 @@ package com.interseguro.soat.pages;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -21,10 +20,9 @@ import java.util.List;
  * la lógica de interacción con dropdowns custom de Vue.js y la
  * estrategia de waits explícitos para elementos dinámicos.
  */
-public class PlanSelectionPage {
+public class PlanSelectionPage extends BasePage {
 
     private final WebDriver driver;
-    private final WebDriverWait wait;
 
     // ==================== LOCATORS - Edición de Vehículo ====================
 
@@ -69,9 +67,8 @@ public class PlanSelectionPage {
     // ==================== CONSTRUCTOR ====================
 
     public PlanSelectionPage(WebDriver driver) {
+        super(driver);
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        PageFactory.initElements(driver, this);
     }
 
     // ==================== ACCIONES - Carga de Página ====================
@@ -212,7 +209,7 @@ public class PlanSelectionPage {
                 // Alternar entre métodos de clic
                 switch (attempt % 4) {
                     case 0: triggerInput.click(); break;
-                    case 1: ((JavascriptExecutor) driver).executeScript("arguments[0].click()", triggerInput); break;
+                    case 1: executeJs("arguments[0].click()", triggerInput); break;
                     case 2: triggerInput.findElement(By.xpath("./..")).click(); break;
                     case 3: new org.openqa.selenium.interactions.Actions(driver)
                                 .moveToElement(triggerInput).click().perform(); break;
@@ -297,26 +294,5 @@ public class PlanSelectionPage {
         }
 
         pause(1000);
-    }
-
-    /**
-     * Hace scroll suave hasta un elemento para asegurar su visibilidad.
-     */
-    private void scrollToElement(WebElement element) {
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
-        pause(500);
-    }
-
-    /**
-     * Pausa la ejecución por un tiempo determinado.
-     * Necesario para esperar animaciones y actualizaciones de dropdowns Vue.js.
-     */
-    private void pause(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 }

@@ -1,11 +1,11 @@
 package com.interseguro.soat.pages;
 
+import com.interseguro.soat.utils.ConfigManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -20,11 +20,10 @@ import java.time.Duration;
  * [IA - GitHub Copilot]: Se utilizó IA para la identificación de locators
  * del DOM y la generación de métodos de interacción con los elementos.
  */
-public class HomePage {
+public class HomePage extends BasePage {
 
     private final WebDriver driver;
-    private final WebDriverWait wait;
-    private static final String URL = "https://test.interseguro.pe/soat-digital/";
+    private static final String URL = ConfigManager.getInstance().getBaseUrl();
 
     // ==================== LOCATORS ====================
 
@@ -39,9 +38,8 @@ public class HomePage {
     // ==================== CONSTRUCTOR ====================
 
     public HomePage(WebDriver driver) {
+        super(driver);
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        PageFactory.initElements(driver, this);
     }
 
     // ==================== ACCIONES ====================
@@ -51,18 +49,18 @@ public class HomePage {
      * Reintenta hasta 2 veces si la página no carga correctamente.
      */
     public void navigateTo() {
-        int maxRetries = 2;
+        int maxRetries = config.getMaxRetryAttempts();
         for (int i = 0; i <= maxRetries; i++) {
             try {
                 driver.get(URL);
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.id("plate")));
-                return; // Página cargó correctamente
+                return;
             } catch (Exception e) {
                 if (i == maxRetries) {
-                    throw e; // Último intento, propagar error
+                    throw e;
                 }
                 System.out.println("[Retry] Reintentando carga de página... intento " + (i + 2));
-                try { Thread.sleep(2000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+                pause(config.getRetryDelayMs());
             }
         }
     }
@@ -78,8 +76,7 @@ public class HomePage {
         if (placa != null && !placa.isEmpty()) {
             inputPlaca.sendKeys(placa);
         }
-        // Pequeña pausa para que Vue.js procese la validación reactiva
-        try { Thread.sleep(500); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        pause(500);
     }
 
     /**
@@ -172,12 +169,7 @@ public class HomePage {
      * @return true si permanece en la landing page
      */
     public boolean isStillOnHomePage() {
-        try {
-            Thread.sleep(3000);
-            return !driver.getCurrentUrl().contains("cotizacion/planes");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return true;
-        }
+        pause(3000);
+        return !getCurrentUrl().contains("cotizacion/planes");
     }
 }

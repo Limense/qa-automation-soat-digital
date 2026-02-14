@@ -45,13 +45,12 @@ Característica: Cotización de SOAT Digital en Interseguro
     Ejemplos:
       | placa   |
       | ABC-123 |
-      | ABC-123 |
 
   # ====================================================================================
   # ESCENARIOS NEGATIVOS
   # ====================================================================================
 
-  @negativo
+  @negativo @pantalla1
   Esquema del escenario: No permite cotizar con placa de formato inválido
     Cuando ingresa la placa "<placa>" y hace clic en Cotizar Ahora
     Entonces se muestra un mensaje de error de placa inválida
@@ -61,12 +60,12 @@ Característica: Cotización de SOAT Digital en Interseguro
       | ABC   |
       | 12345 |
 
-  @negativo
+  @negativo @pantalla1
   Esquema del escenario: No permite avanzar con placa vacía o caracteres especiales
     Cuando ingresa la placa "<placa>" y hace clic en Cotizar Ahora
     Entonces el sistema no permite avanzar y muestra error de validación
 
     Ejemplos:
-      | placa  |
-      |        |
-      | @#$    |
+      | placa |
+      |       |
+      | @#$   |

@@ -30,17 +30,23 @@ public class DriverFactory {
     public static WebDriver getDriver() {
         if (driverThreadLocal.get() == null) {
             WebDriverManager.chromedriver().setup();
+            ConfigManager config = ConfigManager.getInstance();
 
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--start-maximized");
+            if (config.isMaximize()) {
+                options.addArguments("--start-maximized");
+            }
+            if (config.isHeadless()) {
+                options.addArguments("--headless=new");
+            }
             options.addArguments("--disable-notifications");
             options.addArguments("--disable-popup-blocking");
             options.addArguments("--remote-allow-origins=*");
             options.addArguments("--disable-blink-features=AutomationControlled");
 
             WebDriver driver = new ChromeDriver(options);
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getImplicitTimeout()));
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(config.getPageLoadTimeout()));
             driver.manage().window().maximize();
 
             driverThreadLocal.set(driver);

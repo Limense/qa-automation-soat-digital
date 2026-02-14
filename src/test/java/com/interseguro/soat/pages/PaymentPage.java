@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -21,10 +20,9 @@ import java.time.Duration;
  * captura de screenshot del elemento "Resumen de Compra" usando
  * las capacidades de Selenium 4 para screenshots de elementos.
  */
-public class PaymentPage {
+public class PaymentPage extends BasePage {
 
     private final WebDriver driver;
-    private final WebDriverWait wait;
 
     // ==================== LOCATORS ====================
 
@@ -35,9 +33,8 @@ public class PaymentPage {
     // ==================== CONSTRUCTOR ====================
 
     public PaymentPage(WebDriver driver) {
+        super(driver);
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        PageFactory.initElements(driver, this);
     }
 
     // ==================== ACCIONES ====================
