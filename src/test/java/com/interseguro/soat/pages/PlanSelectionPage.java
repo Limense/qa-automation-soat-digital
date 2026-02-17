@@ -22,8 +22,6 @@ import java.util.List;
  */
 public class PlanSelectionPage extends BasePage {
 
-    private final WebDriver driver;
-
     // ==================== LOCATORS - Edición de Vehículo ====================
 
     /** Botón "Editar" para abrir modal de datos del vehículo */
@@ -68,7 +66,6 @@ public class PlanSelectionPage extends BasePage {
 
     public PlanSelectionPage(WebDriver driver) {
         super(driver);
-        this.driver = driver;
     }
 
     // ==================== ACCIONES - Carga de Página ====================
@@ -263,7 +260,7 @@ public class PlanSelectionPage extends BasePage {
             for (WebElement el : candidates) {
                 String tag = el.getTagName().toLowerCase();
                 if (!tag.equals("input") && !tag.equals("label") && el.isDisplayed()) {
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", el);
+                    executeJs("arguments[0].click()", el);
                     selected = true;
                     System.out.println("[Dropdown] Seleccionado '" + value + "' con estrategia A (texto exacto)");
                     break;
@@ -279,7 +276,7 @@ public class PlanSelectionPage extends BasePage {
             for (WebElement el : candidates) {
                 String tag = el.getTagName().toLowerCase();
                 if (!tag.equals("input") && !tag.equals("label") && el.isDisplayed()) {
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", el);
+                    executeJs("arguments[0].click()", el);
                     selected = true;
                     System.out.println("[Dropdown] Seleccionado '" + value + "' con estrategia B (contains)");
                     break;

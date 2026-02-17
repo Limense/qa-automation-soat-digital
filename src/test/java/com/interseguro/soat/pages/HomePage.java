@@ -22,7 +22,6 @@ import java.time.Duration;
  */
 public class HomePage extends BasePage {
 
-    private final WebDriver driver;
     private static final String URL = ConfigManager.getInstance().getBaseUrl();
 
     // ==================== LOCATORS ====================
@@ -39,7 +38,6 @@ public class HomePage extends BasePage {
 
     public HomePage(WebDriver driver) {
         super(driver);
-        this.driver = driver;
     }
 
     // ==================== ACCIONES ====================
@@ -107,7 +105,7 @@ public class HomePage extends BasePage {
         try {
             // Verificar si el input tiene la clase de error o si hay un mensaje de error visible
             WebElement plateInput = driver.findElement(By.id("plate"));
-            String inputClass = plateInput.getAttribute("class");
+            String inputClass = plateInput.getDomAttribute("class");
             if (inputClass != null && inputClass.contains("is-input-error")) {
                 return true;
             }
@@ -151,7 +149,7 @@ public class HomePage extends BasePage {
             // Verificar si el input tiene clase de error
             try {
                 WebElement plateInput = driver.findElement(By.id("plate"));
-                String inputClass = plateInput.getAttribute("class");
+                String inputClass = plateInput.getDomAttribute("class");
                 if (inputClass != null && inputClass.contains("is-input-error")) {
                     return "Placa con formato inválido (input en estado de error)";
                 }

@@ -47,34 +47,56 @@ src/test/
     └── config.properties           # Configuración externalizada
 ```
 
-### Patrones y Buenas Prácticas Aplicadas
+### Patrones de Diseño Aplicados
 
-- **Page Object Model (POM)** con `BasePage` abstracta
+- **Page Object Model (POM)** con `BasePage` abstracta (herencia y DRY)
 - **Singleton con ThreadLocal** para WebDriver (thread-safe)
-- **Configuración externalizada** en `config.properties`
-- **Waits explícitos** (sin Thread.sleep para esperas de elementos)
-- **Constructores privados** en clases utilitarias
+- **Factory Pattern** en `DriverFactory` para instanciación del driver
+- **Template Method** en `BasePage` con métodos utilitarios reutilizables
+- **Strategy Pattern** en `selectFromDropdown` con múltiples estrategias de selección
+
+### Buenas Prácticas de QA Automation
+
+- **Configuración externalizada** en `config.properties` (no hardcoded)
+- **Waits explícitos** con `WebDriverWait` (sin `Thread.sleep` para esperas de elementos)
+- **Constructores privados** en clases utilitarias (previene instanciación)
 - **Javadoc** en todas las clases y métodos públicos
 - **Separación de responsabilidades** (pages, steps, utils, runners)
-- **Screenshots automáticos** en caso de fallo
-- **Reintentos automáticos** para carga de página
+- **Screenshots automáticos** en caso de fallo (evidencia)
+- **Cucumber Hooks** para setup/teardown del ciclo de vida
+- **Tag Strategy** con terminología QA estándar (happy-path, unhappy-path, smoke, e2e)
+- **Data-Driven Testing** con `Scenario Outline` + `Examples`
+- **Reintentos automáticos** para carga de página (resiliencia)
 
 ---
 
 ## 🧪 Escenarios de Prueba
 
-### Positivos (2 Scenario Outlines con Examples)
+### Happy Path (2 Scenario Outlines con Examples)
 1. **Cotizar SOAT editando datos del vehículo** → Alterna marcas (TOYOTA, HYUNDAI) y modelos (YARIS, ACCENT)
 2. **Cotizar SOAT sin editar datos** → Selecciona plan más económico directamente
 
-### Negativos (2 Scenario Outlines con Examples)
-3. **Placa con formato inválido** → ABC, 12345 (menos de 6 caracteres)
-4. **Placa vacía o caracteres especiales** → "", @#$
+### Unhappy Path (2 Scenario Outlines con Examples)
+3. **Placa con formato inválido** → ABC, 12345 (boundary values – menos de 6 caracteres)
+4. **Placa vacía o caracteres especiales** → "", @#$ (input validation)
 
 ### Pantallas Cubiertas
 - **Pantalla 1:** Alternar entre marcas y modelos de carros (modal de edición)
 - **Pantalla 2:** Elegir el seguro más económico (SOAT Básico)
 - **Pantalla 3:** Capturar imagen de la sección "Resumen de tu Compra"
+
+### 🏷 Estrategia de Tags
+
+| Tag | Tipo | Propósito |
+|---|---|---|
+| `@regression` | Suite | Suite de regresión completa (nivel Feature) |
+| `@smoke` | Suite | Pruebas críticas mínimas para CI/CD |
+| `@happy-path` | Flujo | Flujos exitosos del usuario |
+| `@unhappy-path` | Flujo | Flujos con errores y validaciones |
+| `@e2e` | Alcance | End-to-End completo (landing → pago) |
+| `@boundary` | Técnica | Valores límite / particiones de equivalencia |
+| `@validation` | Técnica | Validaciones de entrada y reglas de negocio |
+| `@pantalla1-3` | Pantalla | Filtrar por pantalla/paso específico |
 
 ---
 
@@ -88,14 +110,20 @@ src/test/
 ### Comandos
 
 ```bash
-# Ejecutar todos los escenarios
+# Ejecutar todos los escenarios (regression suite)
 mvn clean test
 
-# Solo escenarios positivos
-mvn test -Dcucumber.filter.tags="@positivo"
+# Solo Happy Path (flujos exitosos)
+mvn test -Dcucumber.filter.tags="@happy-path"
 
-# Solo escenarios negativos
-mvn test -Dcucumber.filter.tags="@negativo"
+# Solo Unhappy Path (validaciones y errores)
+mvn test -Dcucumber.filter.tags="@unhappy-path"
+
+# Solo Smoke Tests (escenarios críticos)
+mvn test -Dcucumber.filter.tags="@smoke"
+
+# Solo End-to-End (flujo completo)
+mvn test -Dcucumber.filter.tags="@e2e"
 
 # Solo escenarios que editan marca/modelo (Pantalla 1)
 mvn test -Dcucumber.filter.tags="@pantalla1"
@@ -132,7 +160,7 @@ Cada archivo contiene la etiqueta `[IA - GitHub Copilot]` indicando específicam
 
 ---
 
-## 👤 Autor
+## 👤 Autor - Andry
 
 Reto técnico - QA Automation para Interseguro  
 Febrero 2026

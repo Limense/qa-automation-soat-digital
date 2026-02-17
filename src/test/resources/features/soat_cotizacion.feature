@@ -4,11 +4,11 @@
 # Se utilizó GitHub Copilot para:
 #   - Diseño y redacción de escenarios de prueba en formato Gherkin (BDD)
 #   - Parametrización de datos con Scenario Outline y Examples (particiones de equivalencia)
-#   - Identificación de escenarios positivos y negativos
+#   - Identificación de happy path y unhappy path scenarios
 #   - Optimización de la cobertura de pruebas automatizadas
 # =====================================================================================
 
-@soat-digital
+@soat-digital @regression
 Característica: Cotización de SOAT Digital en Interseguro
   Como usuario interesado en adquirir un SOAT
   Quiero cotizar mi seguro vehicular en la plataforma digital de Interseguro
@@ -18,10 +18,10 @@ Característica: Cotización de SOAT Digital en Interseguro
     Dado que el usuario ingresa a la página de SOAT Digital
 
   # ====================================================================================
-  # ESCENARIOS POSITIVOS
+  # HAPPY PATH SCENARIOS
   # ====================================================================================
 
-  @positivo @pantalla1 @pantalla2 @pantalla3
+  @happy-path @smoke @e2e @pantalla1 @pantalla2 @pantalla3
   Esquema del escenario: Cotizar SOAT editando datos del vehículo alternando entre marcas y modelos
     Cuando ingresa la placa "<placa>" y hace clic en Cotizar Ahora
     Y edita los datos del vehículo seleccionando marca "<marca>" y modelo "<modelo>"
@@ -35,7 +35,7 @@ Característica: Cotización de SOAT Digital en Interseguro
       | ABC-123 | TOYOTA  | YARIS  |
       | ABC-123 | HYUNDAI | ACCENT |
 
-  @positivo @pantalla2 @pantalla3
+  @happy-path @e2e @pantalla2 @pantalla3
   Esquema del escenario: Cotizar SOAT seleccionando el seguro más económico sin editar datos del vehículo
     Cuando ingresa la placa "<placa>" y hace clic en Cotizar Ahora
     Y selecciona el plan de seguro más económico
@@ -47,10 +47,10 @@ Característica: Cotización de SOAT Digital en Interseguro
       | ABC-123 |
 
   # ====================================================================================
-  # ESCENARIOS NEGATIVOS
+  # UNHAPPY PATH SCENARIOS
   # ====================================================================================
 
-  @negativo @pantalla1
+  @unhappy-path @boundary @pantalla1
   Esquema del escenario: No permite cotizar con placa de formato inválido
     Cuando ingresa la placa "<placa>" y hace clic en Cotizar Ahora
     Entonces se muestra un mensaje de error de placa inválida
@@ -60,7 +60,7 @@ Característica: Cotización de SOAT Digital en Interseguro
       | ABC   |
       | 12345 |
 
-  @negativo @pantalla1
+  @unhappy-path @validation @pantalla1
   Esquema del escenario: No permite avanzar con placa vacía o caracteres especiales
     Cuando ingresa la placa "<placa>" y hace clic en Cotizar Ahora
     Entonces el sistema no permite avanzar y muestra error de validación
