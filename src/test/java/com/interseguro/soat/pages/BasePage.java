@@ -57,7 +57,7 @@ public abstract class BasePage {
      */
     protected void scrollToElement(WebElement element) {
         executeJs("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
-        pause(500);
+        pause(300);
     }
 
     /**

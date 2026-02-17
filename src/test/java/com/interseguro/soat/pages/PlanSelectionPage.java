@@ -93,7 +93,7 @@ public class PlanSelectionPage extends BasePage {
         btnEditar.click();
         // Esperar a que el modal se abra (verificar que el input de marca sea visible)
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("make")));
-        pause(1000);
+        pause(500);
     }
 
     /**
@@ -114,7 +114,7 @@ public class PlanSelectionPage extends BasePage {
      */
     public void selectModelo(String modelo) {
         // Esperar a que el dropdown de modelo se actualice tras seleccionar la marca
-        pause(2000);
+        pause(1200);
         selectFromDropdown(inputModelo, modelo);
     }
 
@@ -126,7 +126,7 @@ public class PlanSelectionPage extends BasePage {
         btnGuardarCambios.click();
         // Esperar a que el modal se cierre (el input make ya no sea visible)
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("make")));
-        pause(1500);
+        pause(800);
     }
 
     // ==================== ACCIONES - Selección de Plan (Pantalla 2) ====================
@@ -140,7 +140,7 @@ public class PlanSelectionPage extends BasePage {
         scrollToElement(btnSeleccionarPlanBasico);
         wait.until(ExpectedConditions.elementToBeClickable(btnSeleccionarPlanBasico));
         btnSeleccionarPlanBasico.click();
-        pause(1000);
+        pause(500);
     }
 
     // ==================== ACCIONES - Renovación y Continuar ====================
@@ -151,12 +151,12 @@ public class PlanSelectionPage extends BasePage {
      */
     public void handleRenewalPopup() {
         try {
-            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
             WebElement noActivarBtn = shortWait.until(
                     ExpectedConditions.elementToBeClickable(btnNoActivar));
             scrollToElement(noActivarBtn);
             noActivarBtn.click();
-            pause(500);
+            pause(300);
         } catch (TimeoutException | NoSuchElementException e) {
             System.out.println("[Info] Sección de renovación no encontrada, continuando...");
         }
@@ -215,7 +215,7 @@ public class PlanSelectionPage extends BasePage {
                 System.out.println("[Dropdown] Error en clic intento " + (attempt + 1) + ": " + clickErr.getMessage());
             }
 
-            pause(1500);
+            pause(800);
 
             // Verificar si el search input apareció
             List<WebElement> candidates = driver.findElements(searchSelector);
@@ -247,7 +247,7 @@ public class PlanSelectionPage extends BasePage {
         searchInput.sendKeys(Keys.CONTROL, "a");
         searchInput.sendKeys(Keys.DELETE);
         searchInput.sendKeys(value);
-        pause(1500);
+        pause(800);
 
         // 3. Intentar encontrar y hacer clic en la opción filtrada
         boolean selected = false;
@@ -290,6 +290,6 @@ public class PlanSelectionPage extends BasePage {
             searchInput.sendKeys(Keys.ENTER);
         }
 
-        pause(1000);
+        pause(500);
     }
 }

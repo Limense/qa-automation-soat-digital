@@ -74,7 +74,7 @@ public class HomePage extends BasePage {
         if (placa != null && !placa.isEmpty()) {
             inputPlaca.sendKeys(placa);
         }
-        pause(500);
+        pause(300);
     }
 
     /**
@@ -90,7 +90,7 @@ public class HomePage extends BasePage {
      * El botón muestra "Obteniendo mejores precios" durante la carga.
      */
     public void waitForCotizacionRedirect() {
-        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(20));
         longWait.until(ExpectedConditions.urlContains("cotizacion/planes"));
     }
 
@@ -111,7 +111,7 @@ public class HomePage extends BasePage {
             }
 
             // Buscar mensajes de error por texto
-            WebElement errorMsg = new WebDriverWait(driver, Duration.ofSeconds(5))
+            WebElement errorMsg = new WebDriverWait(driver, Duration.ofSeconds(3))
                     .until(ExpectedConditions.visibilityOfElementLocated(
                             By.xpath("//*[contains(text(),'placa') and " +
                                      "(contains(text(),'válida') or " +
@@ -136,7 +136,7 @@ public class HomePage extends BasePage {
     public String getErrorMessage() {
         try {
             // Intentar obtener mensaje de error visible
-            WebElement errorMsg = new WebDriverWait(driver, Duration.ofSeconds(5))
+            WebElement errorMsg = new WebDriverWait(driver, Duration.ofSeconds(3))
                     .until(ExpectedConditions.visibilityOfElementLocated(
                             By.xpath("//*[contains(text(),'placa') and " +
                                      "(contains(text(),'válida') or " +
@@ -167,7 +167,7 @@ public class HomePage extends BasePage {
      * @return true si permanece en la landing page
      */
     public boolean isStillOnHomePage() {
-        pause(3000);
+        pause(1500);
         return !getCurrentUrl().contains("cotizacion/planes");
     }
 }
